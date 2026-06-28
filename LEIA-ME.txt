@@ -1,0 +1,7 @@
+Pacote baseado no arquivo index (1).html, mantendo a mesma estrutura de telas e componentes.
+
+Suba na raiz do GitHub: index.html, final.html e a pasta assets.
+Fotos: assets/fotos/jonathan.jpg e assets/fotos/isabella.jpg.
+Áudio: coloque o arquivo da trilha em assets/trilhasonora.mp3. O HTML já aponta para esse caminho.
+
+Versão com textos revisados, mantendo a estrutura do HTML base.

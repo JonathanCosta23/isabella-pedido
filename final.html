@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0814" />
+  <title>Isabella, nossa jornada</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Marcellus+SC&family=Inter:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --bg: #0A0F17;
+      --bg-2: #111826;
+      --bg-3: #1A2231;
+      --panel: rgba(196,203,212,.10);
+      --panel-2: rgba(196,203,212,.06);
+      --line: rgba(196,203,212,.14);
+      --text: #ECE7DD;
+      --muted: #B9B4AA;
+      --muted-2: #A8B0BC;
+      --gold: #8C7C5D;
+      --gold-2: #A79A82;
+      --griff: #5C1F2B;
+      --griff-2: #6D2733;
+      --slyth: #1f3f73;
+      --slyth-2: #b08d57;
+      --success: #7FA59A;
+      --danger: #8F5F73;
+      --radius: 24px;
+      --display-font: "Marcellus SC", "Cinzel", serif;
+      --body-font: Inter, system-ui, sans-serif;
+      --btn-edge: rgba(196,203,212,.38);
+      --btn-edge-soft: rgba(196,203,212,.16);
+      --btn-core-1: #1f2c44;
+      --btn-core-2: #172339;
+      --btn-core-3: #111a2a;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --app-vh: 100dvh;
+      --content-gutter: clamp(10px, 3.8vw, 16px);
+      --screen-gap: clamp(10px, 2.8vw, 16px);
+      --current-main: var(--griff);
+      --current-accent: var(--gold);
+      --shadow: 0 20px 62px rgba(3,6,12,.56);
+      --shadow-soft: 0 10px 30px rgba(5,9,16,.38);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      min-height: 100%;
+      width: 100%;
+      overflow-x: hidden;
+    }
+    body {
+      font-family: var(--body-font);
+      background:
+        radial-gradient(920px 560px at 90% -10%, rgba(43,60,87,.22), transparent 62%),
+        radial-gradient(740px 420px at -10% 4%, rgba(26,39,64,.24), transparent 62%),
+        linear-gradient(180deg, var(--bg), var(--bg-2) 45%, var(--bg-3));
+      color: var(--text);
+      overflow: hidden;
+      touch-action: manipulation;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    .bg-stars, .bg-particles {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    }
+    .bg-stars::before, .bg-stars::after {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(2px 2px at 14% 20%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1.5px 1.5px at 72% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1.5px 1.5px at 84% 72%, rgba(255,255,255,.35), transparent 60%),
+        radial-gradient(1px 1px at 28% 76%, rgba(255,255,255,.55), transparent 60%);
+      animation: twinkle 6s linear infinite;
+      opacity: .55;
+    }
+    .bg-stars::after { animation-delay: -3s; opacity: .32; }
+    @keyframes twinkle { 50% { transform: translateY(-2px); opacity: .9; } }
+
+    .particle {
+      position: absolute;
+      width: 3px; height: 3px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(168,176,188,.85), rgba(43,60,87,.14) 70%, transparent 80%);
+      animation: floatMagic linear infinite;
+    }
+    @keyframes floatMagic {
+      0% { transform: translateY(110vh) scale(.6); opacity: 0; }
+      15%, 85% { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1.25); opacity: 0; }
+    }
+
+    .app {
+      position: relative;
+      z-index: 2;
+      max-width: 460px;
+      margin: 0 auto;
+      min-height: 100svh;
+      min-height: var(--app-vh);
+      display: flex;
+      flex-direction: column;
+      padding-top: calc(10px + var(--safe-top));
+      padding-bottom: calc(8px + var(--safe-bottom));
+      padding-left: max(0px, var(--safe-left));
+      padding-right: max(0px, var(--safe-right));
+      overflow: hidden;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 var(--content-gutter) 10px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      color: #aeb8c8;
+      font-size: clamp(22px, 6.8vw, 28px);
+      letter-spacing: -.03em;
+    }
+    .brand .dot {
+      width: 18px; height: 24px;
+      border-radius: 14px 14px 18px 18px;
+      background: linear-gradient(180deg, #8b96a7, #5c687d);
+      transform: rotate(-18deg);
+      box-shadow: 0 8px 18px rgba(94,109,136,.35);
+    }
+    .topbar-actions {
+      display: flex; gap: 10px;
+    }
+    .icon-btn {
+      width: 38px; height: 38px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      display: grid; place-items: center;
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+    }
+    .icon-btn:active { transform: scale(.96); }
+
+    .progress-wrap {
+      padding: 0 var(--content-gutter) 10px;
+    }
+    .progress-bar {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 4px;
+    }
+    .progress-bar span {
+      height: 5px; border-radius: 999px;
+      background: rgba(255,255,255,.16);
+      overflow: hidden;
+    }
+    .progress-bar span.active {
+      background: linear-gradient(90deg, var(--current-main), var(--current-accent));
+      box-shadow: 0 0 0 1px rgba(255,255,255,.04), 0 0 12px color-mix(in srgb, var(--current-accent) 45%, transparent);
+    }
+
+    .screen {
+      display: none;
+      flex: 1;
+      min-height: 0;
+      padding: 0 var(--content-gutter);
+      overflow-x: hidden;
+    }
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+    }
+    .scroll {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: calc(14px + var(--safe-bottom));
+      overscroll-behavior-y: contain;
+      touch-action: pan-y;
+    }
+    .scroll::-webkit-scrollbar { display: none; }
+
+    .hero {
+      min-height: calc(var(--app-vh) - 106px - var(--safe-bottom));
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center;
+      gap: 12px;
+      padding: 10px 4px 18px;
+    }
+    .badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(196,203,212,.22);
+      background: linear-gradient(135deg, rgba(58,70,88,.44), rgba(21,25,34,.58));
+      font: 700 11px/1 Cinzel, serif;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #c4cbd4;
+    }
+    .houses {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+    }
+    .house-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 14px; border-radius: 999px;
+      font: 700 12px/1 Cinzel, serif;
+      letter-spacing: .06em;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    }
+    .griff { background: linear-gradient(135deg, rgba(92,31,43,.88), rgba(109,39,51,.35)); color: #d7d1c2; }
+    .slyth { background: linear-gradient(135deg, rgba(31,63,115,.92), rgba(176,141,87,.36)); color: #e8edf8; }
+
+    .hero h1, .panel-title, .card-name, .card-age, .destination-time, .final-question, .match-word {
+      font-family: var(--display-font);
+      letter-spacing: .035em;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 8.2vw, 44px);
+      line-height: 1.06;
+      max-width: 11ch;
+      background: linear-gradient(120deg, #e7e5df, #c4cbd4, #a8b0bc);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 16px rgba(168,176,188,.16));
+    }
+    .hero p {
+      max-width: 340px;
+      color: var(--muted);
+      font-size: clamp(14px, 4.1vw, 16px);
+      line-height: 1.55;
+    }
+    .scroll-note {
+      max-width: 340px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      color: #eadfcf;
+      line-height: 1.55;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .cta {
+      width: 100%;
+      min-height: 52px;
+      border-radius: 999px;
+      border: 0;
+      padding: 13px 18px;
+      font: 700 15px/1.1 var(--body-font);
+      cursor: pointer;
+      transition: transform .17s ease, box-shadow .17s ease, opacity .17s ease, border-color .17s ease, filter .17s ease;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .cta::before {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      z-index: -1;
+      opacity: .72;
+      background:
+        linear-gradient(160deg, rgba(196,203,212,.14), transparent 35%),
+        radial-gradient(110% 180% at 86% 0%, rgba(196,203,212,.10), transparent 52%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0) 30%);
+      pointer-events: none;
+    }
+    .cta-primary {
+      clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0 50%);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-family: var(--display-font);
+      font-weight: 500;
+      background:
+        linear-gradient(135deg, var(--btn-core-1), var(--btn-core-2) 54%, var(--btn-core-3));
+      color: #ecf0f6;
+      border: 1px solid var(--btn-edge);
+      box-shadow:
+        inset 0 1px 0 rgba(222,230,240,.25),
+        inset 0 -1px 0 rgba(12,16,24,.52),
+        0 10px 24px rgba(7,13,23,.46);
+    }
+    .cta-secondary {
+      background: linear-gradient(135deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+    .cta-accept {
+      clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0 50%);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-family: var(--display-font);
+      font-weight: 500;
+      background:
+        linear-gradient(135deg, #30425e, color-mix(in srgb, var(--slyth) 45%, #54657e));
+      color: #edf1f8;
+      border: 1px solid var(--btn-edge);
+      box-shadow:
+        inset 0 1px 0 rgba(222,230,240,.22),
+        inset 0 -1px 0 rgba(12,16,24,.5),
+        0 10px 24px rgba(7,13,23,.46);
+    }
+    .cta-danger {
+      clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0 50%);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-family: var(--display-font);
+      font-weight: 500;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--current-main) 84%, #111826), color-mix(in srgb, var(--current-main) 70%, #3a4658));
+      color: #ebe4e6;
+      border: 1px solid var(--btn-edge-soft);
+      box-shadow:
+        inset 0 1px 0 rgba(222,230,240,.16),
+        inset 0 -1px 0 rgba(12,16,24,.5),
+        0 10px 24px rgba(7,13,23,.42);
+    }
+    .cta:hover {
+      filter: brightness(1.05);
+      border-color: rgba(196,203,212,.42);
+    }
+    .cta:focus-visible {
+      outline: 2px solid rgba(196,203,212,.4);
+      outline-offset: 2px;
+    }
+    .cta:active {
+      transform: translateY(1px) scale(.985);
+      box-shadow:
+        inset 0 2px 5px rgba(8,12,18,.38),
+        0 6px 16px rgba(7,13,23,.35);
+    }
+
+    /* Acabamento visual alinhado aos CTAs principais (somente 3 botões-alvo) */
+    #detailsBackBtn,
+    #yesBtn2,
+    #toFinalBtn {
+      clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0 50%);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-family: var(--display-font);
+      font-weight: 500;
+      border: 1px solid var(--btn-edge);
+      background: linear-gradient(135deg, var(--btn-core-1), var(--btn-core-2) 54%, var(--btn-core-3));
+      color: #ecf0f6;
+      box-shadow:
+        inset 0 1px 0 rgba(222,230,240,.25),
+        inset 0 -1px 0 rgba(12,16,24,.52),
+        0 10px 24px rgba(7,13,23,.46);
+    }
+
+    #toFinalBtn.cta-secondary {
+      border-color: var(--btn-edge-soft);
+      background: linear-gradient(135deg, #2b3750, #1b263d 54%, #121b2c);
+      color: #d6dde9;
+    }
+
+    #toFinalBtn:disabled {
+      opacity: 1;
+      cursor: not-allowed;
+      border-color: var(--btn-edge-soft);
+      background: linear-gradient(135deg, #2a3348, #1a2233 54%, #101826);
+      color: #b8c2d2;
+      box-shadow:
+        inset 0 1px 0 rgba(222,230,240,.12),
+        inset 0 -1px 0 rgba(12,16,24,.5),
+        0 8px 18px rgba(7,13,23,.34);
+      filter: saturate(.84) brightness(.92);
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(43,60,87,.26), rgba(17,24,38,.6));
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .swipe-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--screen-gap);
+      padding-bottom: 8px;
+    }
+    .deck-card {
+      position: relative;
+      min-height: clamp(420px, 64dvh, 640px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.1);
+      background: #111;
+    }
+    .deck-photo {
+      position: absolute; inset: 0;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      filter: saturate(1.02);
+    }
+    .deck-photo::after {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(180deg, rgba(10,15,23,.04) 36%, rgba(17,24,38,.34) 62%, rgba(10,15,23,.82) 100%);
+    }
+
+    .deck-top {
+      position: absolute; top: 12px; left: 12px; right: 12px;
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
+      z-index: 2;
+    }
+    .mini-badge {
+      max-width: 44%;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: rgba(8,8,12,.5);
+      border: 1px solid rgba(255,255,255,.14);
+      color: #f6eddc;
+      font: 700 10px/1.1 Cinzel, serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-soft);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mini-badge.secondary {
+      background: linear-gradient(135deg, rgba(10,15,23,.58), color-mix(in srgb, var(--current-main) 36%, #1a2231));
+      max-width: 54%;
+    }
+
+    .deck-copy {
+      position: relative;
+      z-index: 2;
+      padding: 12px 12px 10px;
+      margin-top: auto;
+    }
+    .signature {
+      display: inline-flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .card-name {
+      font-size: clamp(27px, 7.8vw, 40px);
+      line-height: .92;
+      color: #fff9ea;
+      text-shadow: 0 4px 22px rgba(0,0,0,.55);
+    }
+    .card-age {
+      font-size: clamp(18px, 5.8vw, 26px);
+      line-height: 1;
+      color: #f4e8cf;
+      text-shadow: 0 4px 18px rgba(0,0,0,.4);
+    }
+    .verified {
+      width: 22px; height: 22px; border-radius: 999px;
+      display: inline-grid; place-items: center;
+      background: #2f8cff; color: white; font-size: 14px; font-weight: 900;
+      box-shadow: 0 4px 16px rgba(47,140,255,.28);
+      transform: translateY(-1px);
+    }
+    .deck-quote {
+      font-size: clamp(13px, 3.5vw, 15px);
+      line-height: 1.35;
+      color: #fff3de;
+      max-width: 88%;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 12px rgba(0,0,0,.5);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .deck-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 8px;
+      color: #f4ecdd;
+      font-weight: 600;
+    }
+    .deck-meta .row {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px;
+    }
+
+    .chips {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-bottom: 8px;
+      max-height: 56px;
+      overflow: hidden;
+    }
+    .chip {
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,.12);
+      color: #f4ead7;
+      font-size: 11px;
+      font-weight: 700;
+      backdrop-filter: blur(8px);
+    }
+
+    .action-card {
+      padding: 12px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(43,60,87,.22), rgba(17,24,38,.54));
+      box-shadow: var(--shadow-soft);
+    }
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .action-row .cta {
+      min-height: 46px;
+      padding: 10px 14px;
+      font-size: 15px;
+    }
+    .action-foot {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      text-align: center;
+    }
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      max-width: 320px;
+    }
+    .linkish {
+      background: none; border: 0; color: #aeb8c8;
+      font-weight: 800; font-size: 13px; cursor: pointer;
+    }
+
+    .detail-layout {
+      display: grid; gap: var(--screen-gap);
+      padding-bottom: 10px;
+    }
+    .detail-hero {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+    .detail-hero-top {
+      display: grid;
+      grid-template-columns: 82px 1fr;
+      gap: 12px; align-items: center;
+    }
+    .avatar-lg {
+      width: 82px; height: 82px; border-radius: 20px;
+      background-position: center; background-size: cover;
+      border: 2px solid rgba(255,255,255,.16);
+      box-shadow: var(--shadow-soft);
+    }
+    .detail-name {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline;
+    }
+    .detail-name .card-name { font-size: clamp(24px, 7vw, 30px); text-shadow: none; }
+    .detail-name .card-age { font-size: clamp(18px, 5.4vw, 22px); text-shadow: none; }
+    .detail-bio {
+      font-size: 14px; line-height: 1.55; color: var(--muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .mini-card {
+      padding: 12px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(58,70,88,.26), rgba(17,24,38,.55));
+      border: 1px solid var(--line);
+      display: grid; gap: 8px;
+    }
+    .mini-card .label {
+      font: 700 10px/1 Cinzel, serif;
+      letter-spacing: .08em; text-transform: uppercase; color: #c4cbd4;
+    }
+    .mini-card strong {
+      font-size: 16px; line-height: 1.35; color: var(--text);
+    }
+    .mini-card p {
+      color: var(--muted); font-size: 14px; line-height: 1.5;
+    }
+
+    .match-stage {
+      min-height: calc(var(--app-vh) - 130px - var(--safe-bottom));
+      display: flex; align-items: center; justify-content: center;
+      padding-bottom: 14px;
+    }
+    .match-panel {
+      position: relative;
+      width: 100%;
+      padding: 20px 14px 16px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .match-panel::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 50% 10%, rgba(255,255,255,.08), transparent 28%),
+        radial-gradient(circle at 20% 18%, rgba(255,255,255,.06), transparent 20%),
+        radial-gradient(circle at 84% 22%, rgba(255,255,255,.05), transparent 18%);
+      pointer-events: none;
+    }
+    .match-orbs {
+      display: flex; justify-content: center; align-items: center;
+      margin-bottom: 12px;
+    }
+    .orb {
+      width: clamp(90px, 27vw, 124px); height: clamp(90px, 27vw, 124px); border-radius: 50%;
+      border: 4px solid rgba(255,255,255,.8);
+      background-size: cover; background-position: center;
+      box-shadow: 0 18px 36px rgba(0,0,0,.25);
+    }
+    .orb + .orb { margin-left: -20px; }
+    .match-word {
+      font-size: clamp(34px, 11vw, 60px);
+      line-height: .9;
+      margin-bottom: 10px;
+      color: #fffbea;
+      text-shadow: 0 8px 0 rgba(0,0,0,.28), 0 16px 34px rgba(0,0,0,.35);
+    }
+    .match-copy {
+      color: #f2eadc;
+      font-size: clamp(14px, 4.3vw, 17px);
+      line-height: 1.5;
+      max-width: 330px;
+      margin: 0 auto 14px;
+    }
+
+    .letter-panel, .date-panel, .journey-panel, .final-panel {
+      padding: 16px 14px;
+      display: grid; gap: var(--screen-gap);
+    }
+    .parchment {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(184,176,159,.3);
+      background:
+        linear-gradient(180deg, rgba(215,209,194,.14), rgba(184,176,159,.06)),
+        linear-gradient(180deg, rgba(43,60,87,.18), rgba(21,25,34,.3));
+      color: #e2ddd1;
+      line-height: 1.7;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    }
+    .letter-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      font: 700 11px/1 Cinzel, serif; letter-spacing: .08em; text-transform: uppercase;
+      color: #f6e1a6;
+    }
+    .letter-title {
+      font-family: var(--display-font);
+      letter-spacing: .04em;
+      font-size: clamp(22px, 6.8vw, 28px);
+      color: #fff8eb;
+    }
+
+    .date-top {
+      display: grid; gap: 10px;
+    }
+    .destination-time {
+      font-size: clamp(30px, 11vw, 54px);
+      line-height: .9;
+      color: #c4cbd4;
+    }
+    .date-place {
+      color: var(--muted);
+      font-size: clamp(14px, 4vw, 16px);
+      line-height: 1.5;
+    }
+    .stage-list {
+      display: grid; gap: 10px;
+    }
+    .stage-item {
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      display: grid; gap: 6px;
+    }
+    .stage-item .top {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .stage-item h3 {
+      font-size: clamp(16px, 4.8vw, 18px); color: var(--text);
+    }
+    .stage-item p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .lock {
+      color: #a89b89;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .final-panel {
+      min-height: calc(var(--app-vh) - 130px - var(--safe-bottom));
+      align-content: center;
+      text-align: center;
+    }
+    .final-question {
+      font-size: clamp(30px, 9.4vw, 52px);
+      line-height: 1;
+      color: #e7e5df;
+      margin-bottom: 6px;
+    }
+    .final-copy {
+      color: var(--muted);
+      font-size: clamp(14px, 4vw, 16px);
+      line-height: 1.6;
+      max-width: 330px;
+      margin: 0 auto 6px;
+    }
+    .yes-grid {
+      display: grid; gap: 10px;
+      margin-top: 8px;
+    }
+    .nav-row {
+      display: flex; justify-content: space-between; gap: 10px;
+      padding: 0 0 6px;
+    }
+    .tiny {
+      min-height: 42px; padding: 10px 12px; font-size: 14px;
+    }
+
+    .pulse-heart {
+      position: absolute;
+      font-size: 22px;
+      pointer-events: none;
+      animation: burst 1.35s ease forwards;
+    }
+    @keyframes burst {
+      0% { transform: translateY(0) scale(.5); opacity: 0; }
+      15% { opacity: 1; }
+      100% { transform: translateY(-70px) translateX(var(--dx,0px)) rotate(var(--rot,0deg)) scale(1.2); opacity: 0; }
+    }
+
+
+    .icon-btn.audio-on { color: var(--gold-2); border-color: color-mix(in srgb, var(--gold) 40%, var(--line)); }
+    .icon-btn.audio-off { opacity: .75; }
+
+    .lock-toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(22px + var(--safe-bottom));
+      transform: translate(-50%, 18px);
+      width: min(92vw, 420px);
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(196,203,212,.22);
+      background: linear-gradient(135deg, rgba(17,24,38,.95), rgba(26,39,64,.93));
+      color: #d7d1c2;
+      font-size: 14px;
+      line-height: 1.45;
+      box-shadow: var(--shadow-soft);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .28s ease, transform .28s ease;
+      z-index: 40;
+      text-align: center;
+    }
+    .lock-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    .final-modal {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      background: rgba(10,15,23,.76);
+      backdrop-filter: blur(5px);
+      opacity: 0; pointer-events: none;
+      transition: opacity .45s ease;
+      z-index: 50;
+    }
+    .final-modal.show { opacity: 1; pointer-events: auto; }
+    .final-modal-card {
+      width: min(92vw, 360px);
+      padding: 24px 20px;
+      text-align: center;
+      animation: softIn .45s ease;
+    }
+    .final-modal-card p {
+      font-size: 18px;
+      line-height: 1.6;
+      color: #d7d1c2;
+    }
+
+    .screen.active { animation: softIn .35s ease; }
+    @keyframes softIn {
+      from { opacity: 0; transform: translateY(8px) scale(.995); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    @media (max-width: 390px) {
+      .app { max-width: 100%; }
+      .screen { padding: 0 12px; }
+      .topbar { padding: 0 12px 12px; }
+      .progress-wrap { padding: 0 12px 12px; }
+      .hero h1 { font-size: clamp(26px, 9.5vw, 38px); }
+      .deck-card { min-height: clamp(390px, 62dvh, 560px); border-radius: 22px; }
+      .card-name { font-size: clamp(28px, 8.4vw, 36px); }
+      .card-age { font-size: clamp(20px, 6.2vw, 24px); }
+      .deck-quote { font-size: 15px; max-width: 94%; }
+      .mini-badge { font-size: 9px; padding: 7px 9px; }
+      .mini-badge.secondary { max-width: 58%; }
+      .action-row .cta { font-size: 14px; min-height: 44px; }
+      .match-word { font-size: clamp(32px, 10.5vw, 42px); }
+      .orb { width: clamp(84px, 26vw, 108px); height: clamp(84px, 26vw, 108px); }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    @media (min-width: 768px) {
+      body {
+        background:
+          radial-gradient(1000px 600px at 80% -10%, rgba(43,60,87,.24), transparent 60%),
+          radial-gradient(800px 520px at -10% 0%, rgba(26,39,64,.28), transparent 60%),
+          linear-gradient(180deg, var(--bg), var(--bg-2) 45%, var(--bg-3));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-stars"></div>
+  <div class="bg-particles" id="particles"></div>
+
+  <main class="app" id="app">
+    <div class="topbar">
+      <div class="brand"><span class="dot"></span><span>Feitiço</span></div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="audioToggleBtn" aria-label="Música" title="Música">♪</button>
+        <button class="icon-btn" id="backBtn" aria-label="Voltar" title="Voltar">←</button>
+        <button class="icon-btn" id="resetBtn" aria-label="Recomeçar" title="Recomeçar">↺</button>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progressBar">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <section class="screen active" id="welcome">
+      <div class="scroll">
+        <div class="hero">
+          <h1>Isabella, nossa jornada começa agora</h1>
+          <p>Do nosso match no Tinder aos três anos que ensinaram a gente sobre amor, cuidado e recomeço, hoje eu preparei um caminho com pistas, memórias e três paradas no tempo certo. Cada capítulo abre uma parte do que eu sinto por você.</p>
+          <button class="cta cta-primary" id="enterBtn">Começar a jornada</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="swipe">
+      <div class="scroll swipe-wrap">
+        <article class="deck-card" id="deckCard">
+          <div class="deck-photo" id="deckPhoto"></div>
+          <div class="deck-top">
+            <div class="mini-badge" id="compatBadge">Sinal de corredor aberto</div>
+            <div class="mini-badge secondary" id="houseBadge">Casa em destaque</div>
+          </div>
+          <div class="deck-copy">
+            <div class="signature">
+              <span class="card-name" id="deckName">Jonathan</span>
+              <span class="card-age" id="deckAge">25</span>
+              <span class="verified">✓</span>
+            </div>
+            <div class="deck-quote" id="deckQuote">Alguns matches viram conversa, alguns amores viram história, e o nosso virou vontade de vida inteira.</div>
+            <div class="deck-meta">
+              <div class="row">⚡ <span id="metaIntent">Cuidado, família e amor que pede presença</span></div>
+              <div class="row">🪄 <span id="metaHouse">Grifinória</span></div>
+            </div>
+            <div class="chips" id="deckChips"></div>
+          </div>
+        </article>
+
+        <div class="action-card">
+          <div class="action-row">
+            <button class="cta cta-danger" id="passBtn">VIRAR A PÁGINA
+</button>
+            <button class="cta cta-accept" id="likeBtn">ABRIR O PERGAMINHO</button>
+          </div>
+          <div class="action-foot">
+            <button class="linkish" id="moreBtn">APARECIUM, MOSTRE QUEM VOCÊ É</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="details">
+      <div class="scroll detail-layout">
+        <div class="panel detail-hero">
+          <div class="detail-hero-top">
+            <div class="avatar-lg" id="detailAvatar"></div>
+            <div>
+              <div class="detail-name">
+                <span class="card-name" id="detailName">Jonathan</span>
+                <span class="card-age" id="detailAge">25</span>
+              </div>
+              <div class="houses" style="justify-content:flex-start; margin-top:10px;">
+                <div class="house-pill griff" id="detailHousePill">🦁 Grifinória</div>
+              </div>
+            </div>
+          </div>
+          <p class="detail-bio" id="detailBio"></p>
+        </div>
+
+        <div class="grid-2">
+          <div class="mini-card">
+            <span class="label">O que procura</span>
+            <strong id="detailIntent">Uma jornada com amor, verdade e presença</strong>
+            <p>Sem pressa, sem joguinhos, com cuidado no caminho e verdade em cada detalhe.</p>
+          </div>
+          <div class="mini-card">
+            <span class="label">Sinais na margem</span>
+            <strong id="detailSigns">Tinder, cuidado diário e coragem para recomeçar</strong>
+            <p>Da preocupação se cheguei bem às mensagens de cuidado, o amor sempre apareceu nos detalhes.</p>
+          </div>
+          <div class="mini-card">
+            <span class="label">Favoritos</span>
+            <strong id="detailFavorites">Harry Potter, girassóis, família e tempo de qualidade</strong>
+            <p>O jeito dela de cuidar, sentir, perguntar e transformar presença em casa.</p>
+          </div>
+          <div class="mini-card">
+            <span class="label">Primeiro capítulo</span>
+            <strong>Café às 13:00</strong>
+            <p>Um começo leve, com pistas para a magia das 14:30.</p>
+          </div>
+        </div>
+
+        <div class="nav-row">
+          <button class="cta cta-primary tiny" id="detailsBackBtn">Voltar ao retrato</button>
+          <button class="cta cta-primary tiny" id="detailsNextBtn">ABRIR O PERGAMINHO</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="match">
+      <div class="scroll">
+        <div class="match-stage">
+          <div class="panel match-panel">
+            <div class="match-orbs">
+              <div class="orb" id="matchOrbLeft"></div>
+              <div class="orb" id="matchOrbRight"></div>
+            </div>
+            <div class="badge" style="margin: 0 auto 14px;">Aparecium</div>
+            <div class="match-word">Match</div>
+            <p class="match-copy">Não foi só um match no Tinder. Foi o começo de uma história que viveu três anos, passou por erros, saudade, cuidado e recomeço, e ainda assim encontrou coragem para continuar. Hoje, eu não quero pular etapas: quero te levar por uma jornada pensada para nós.</p>
+            <button class="cta cta-primary" id="toLetterBtn">ABRIR O PRIMEIRO CAPÍTULO</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="letter">
+      <div class="scroll">
+        <div class="panel letter-panel">
+          <div class="letter-head">
+            <span>Primeiro pergaminho</span>
+            <span>07/04/2026</span>
+          </div>
+          <div class="letter-title">Para a mulher que sempre me trouxe de volta para casa</div>
+          <div class="parchment">
+            Isabella,<br>
+            quando eu olho para nós, eu não vejo só três anos de namoro. Eu vejo o começo no Tinder, as conversas que viraram rotina, as mensagens de cuidado, os bons dias, os “se cuida”, os “dorme com Deus”, a saudade aumentando e a forma como, mesmo nos dias difíceis, ainda existia amor entre a gente.<br><br>
+            Eu não quero apagar o passado nem fingir que ele não existiu. Quero honrar tudo que vivemos, aprender com o que doeu e te mostrar, em atitudes, que meu amor amadureceu. Por isso preparei essa jornada: um café para começar com calma, uma tarde com magia e uma noite para guardar no coração.
+          </div>
+          <button class="cta cta-primary" id="toChapter1Btn">ABRIR O PRIMEIRO CAPÍTULO</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="date13">
+      <div class="scroll">
+        <div class="panel date-panel">
+          <div class="badge">Capítulo 1 • 13:00</div>
+          <h2 class="panel-title">Café, calma e primeiras pistas</h2>
+          <div class="destination-time">13:00</div>
+          <div class="date-place" id="chapter1Place">Às 13:00, nossa jornada começa tomando café. Quero que esse início seja leve: conversa, carinho, olhar tranquilo e aquela sensação de que o dia foi pensado para você. Aqui, algumas pistas começam a aparecer sobre o capítulo das 14:30.</div>
+          <div class="parchment" id="chapter1Parchment">Preste atenção nos sinais: existe um destino com clima bruxo, vassouras no nome e uma magia que combina com nós dois. Ainda não é hora de revelar tudo, só de deixar o coração curioso para a próxima parada.</div>
+          <button class="cta cta-primary" id="toChapter2Btn">Seguir para o segundo capítulo</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="dateBeco">
+      <div class="scroll">
+        <div class="panel date-panel">
+          <div class="badge">Capítulo 2 • 14:30</div>
+          <h2 class="panel-title">Vassoura Quebrada, nossa parada mágica</h2>
+          <div class="destination-time">14:30</div>
+          <div class="date-place">Às 14:30, as pistas chegam ao destino: Vassoura Quebrada, no Shopping Parque da Cidade. Um lugar para rir, entrar no clima de Harry Potter e transformar a tarde em uma memória leve, divertida e nossa.</div>
+          <div class="parchment">Escolhi esse capítulo porque ele conversa com o nosso universo: um pouco de magia, surpresa, brincadeira e presença. Depois daqui, ainda existe uma última pista, mais calma, mais romântica e com sabor de Itália.</div>
+          <button class="cta cta-primary" id="toJourneyBtn">Seguir para a última pista</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="journey">
+      <div class="scroll">
+        <div class="panel journey-panel">
+          <div class="badge">Mapa da jornada</div>
+          <h2 class="panel-title">Cada capítulo abre no tempo certo</h2>
+          <div class="stage-list">
+            <div class="stage-item">
+              <div class="top">
+                <h3>Capítulo 1 • 13:00</h3>
+                <span class="lock" id="lock1">Selado</span>
+              </div>
+              <p id="journey1Copy">Um café para começar com calma, carinho e pistas sobre a magia das 14:30.</p>
+            </div>
+            <div class="stage-item">
+              <div class="top">
+                <h3>Capítulo 2 • 14:30</h3>
+                <span class="lock" id="lock2">Selado</span>
+              </div>
+              <p id="journey2Copy">Vassoura Quebrada, às 14:30: o capítulo da magia, da leveza e das risadas que a gente merece viver junto.</p>
+            </div>
+            <div class="stage-item">
+              <div class="top">
+                <h3>Capítulo 3 • 21:00</h3>
+                <span class="lock" id="lock3">Selado</span>
+              </div>
+              <p id="journey3Copy">A última pista fala de uma viagem sem sair de São Paulo: mesa italiana, conversa calma, romantismo e uma noite feita para o tempo desacelerar.</p>
+              <button class="cta cta-secondary tiny" id="unlock3Btn">Revelar o capítulo das 21:00</button>
+            </div>
+          </div>
+
+          <div class="parchment" id="journeySummary">Sem pressa. Primeiro o café, depois a magia das 14:30. Às 21:00, a noite ganha sabor de Itália e abre espaço para o último feitiço.</div>
+          <button class="cta cta-primary" id="toFinalBtn" disabled>REVELAR O CAPÍTULO DAS 21:00</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="night">
+      <div class="scroll">
+        <div class="panel date-panel">
+          <div class="badge">Capítulo 3 • 21:00</div>
+          <h2 class="panel-title">Uma jornada à Itália</h2>
+          <div class="destination-time">21:00</div>
+          <div class="date-place">Às 21:00, o último destino da jornada é um restaurante italiano. Uma mesa para fechar o dia com calma, conversa, sabor e romantismo.</div>
+          <div class="parchment">Depois do café e do Vassoura Quebrada, eu queria que a noite terminasse em um lugar com clima de viagem, como se a gente atravessasse para a Itália sem sair daqui. Tudo foi pensado para chegar nesse momento com leveza, presença e coração aberto.</div>
+          <button class="cta cta-primary" id="toFinalFromNightBtn">Abrir o último feitiço</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="final">
+      <div class="scroll">
+        <div class="final-panel">
+          <div class="badge">Último feitiço</div>
+          <div class="final-question">Isabella, aceita casar comigo?</div>
+          <p class="final-copy">A gente se conheceu no Tinder, escolheu namorar, viveu três anos, errou, aprendeu, sentiu saudade, recomeçou e continuou se escolhendo. Hoje eu não quero só mais um capítulo, eu quero a vida inteira: cuidar de você, construir uma família, ser seu lar e te escolher todos os dias como minha esposa.</p>
+          <div class="yes-grid">
+            <button class="cta cta-primary" id="yesBtn1">Sim, eu aceito ✨</button>
+            <button class="cta cta-primary" id="yesBtn2">SIM, MIL VEZES 💍</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="lock-toast" id="lockToast" role="status" aria-live="polite"></div>
+    <div class="final-modal" id="finalModal" aria-hidden="true">
+      <div class="final-modal-card panel">
+        <div class="badge">Depois do sim</div>
+        <p id="finalModalMessage">Se você disser sim, esse dia vira o começo oficial da nossa família, do nosso lar e da vida que eu quero construir ao seu lado. Te amo, pra todo sempre.</p>
+      </div>
+    </div>
+
+    <audio id="bgAudio" preload="none" loop>
+      <source src="assets/trilhasonora.mp3" type="audio/mpeg" />
+    </audio>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'pedido_isabella_v1';
+
+    const profiles = [
+      {
+        name: 'Jonathan',
+        age: 25,
+        house: 'Grifinória',
+        icon: '🦁',
+        colorMain: '#8b1a35',
+        colorAccent: '#b08d57',
+        image: "assets/fotos/jonathan.jpg",
+        quote: 'Do Tinder até aqui, eu aprendi que amar você é escolher presença, cuidado e futuro todos os dias.',
+        bio: 'Grifinório de alma, sigo aprendendo que amor de verdade não é só intensidade: é presença, responsabilidade, paciência, pedido de desculpa sincero e atitude para fazer melhor.',
+        chips: ['Harry Potter', 'Preto', 'Jogos', 'Experiências'],
+        intent: 'Conduzir essa jornada com calma, carinho e coragem, sem antecipar o que precisa ser vivido no tempo certo.',
+        signs: 'presença, cuidado, responsabilidade e vontade de futuro',
+        favorites: 'Harry Potter, nossas memórias, viagens, família e tudo que ganha significado com ela'
+      },
+      {
+        name: 'Isabella',
+        age: 24,
+        house: 'Corvinal',
+        icon: '🦅',
+        colorMain: '#1f3f73',
+        colorAccent: '#b08d57',
+        image: "assets/fotos/isabella.jpg",
+        quote: 'Corvinal no olhar, coração enorme e esse jeito de cuidar que sempre me trouxe de volta para casa.',
+        bio: 'Corvinal de alma, inteligente, sensível e cuidadosa. Você tem esse jeito de amar nos detalhes: perguntar se cheguei bem, mandar cuidar de mim, lembrar do que importa e fazer até os dias difíceis parecerem caminho de volta para casa.',
+        chips: ['Harry Potter', 'Girassóis', 'Família', 'Cuidado'],
+        intent: 'Sentir segurança, verdade e um amor que aparece em atitudes.',
+        signs: 'cuidado, família, saudade, presença e vontade de futuro',
+        favorites: 'Harry Potter, girassóis, tempo de qualidade, família e carinho'
+      }
+    ];
+
+    const SCHEDULE = {
+      chapter1: { day: 25, hour: 13, minute: 0, label: 'capítulo 1' },
+      chapter2: { day: 25, hour: 14, minute: 30, label: 'capítulo 2' },
+      chapter3: { day: 25, hour: 21, minute: 0, label: 'capítulo 3' }
+    };
+
+    const state = loadState();
+    const screenOrder = ['welcome','swipe','details','match','letter','date13','dateBeco','journey','night','final'];
+
+    const el = {
+      app: document.getElementById('app'),
+      screens: [...document.querySelectorAll('.screen')],
+      progressSpans: [...document.querySelectorAll('#progressBar span')],
+      backBtn: document.getElementById('backBtn'),
+      resetBtn: document.getElementById('resetBtn'),
+      audioToggleBtn: document.getElementById('audioToggleBtn'),
+      audio: document.getElementById('bgAudio'),
+      enterBtn: document.getElementById('enterBtn'),
+      passBtn: document.getElementById('passBtn'),
+      likeBtn: document.getElementById('likeBtn'),
+      moreBtn: document.getElementById('moreBtn'),
+      detailsBackBtn: document.getElementById('detailsBackBtn'),
+      detailsNextBtn: document.getElementById('detailsNextBtn'),
+      toLetterBtn: document.getElementById('toLetterBtn'),
+      toChapter1Btn: document.getElementById('toChapter1Btn'),
+      toChapter2Btn: document.getElementById('toChapter2Btn'),
+      toJourneyBtn: document.getElementById('toJourneyBtn'),
+      toFinalFromNightBtn: document.getElementById('toFinalFromNightBtn'),
+      unlock3Btn: document.getElementById('unlock3Btn'),
+      toFinalBtn: document.getElementById('toFinalBtn'),
+      yesBtn1: document.getElementById('yesBtn1'),
+      yesBtn2: document.getElementById('yesBtn2'),
+      finalModal: document.getElementById('finalModal'),
+      finalModalMessage: document.getElementById('finalModalMessage'),
+      lockToast: document.getElementById('lockToast'),
+      deckPhoto: document.getElementById('deckPhoto'),
+      deckName: document.getElementById('deckName'),
+      deckAge: document.getElementById('deckAge'),
+      deckQuote: document.getElementById('deckQuote'),
+      metaIntent: document.getElementById('metaIntent'),
+      metaHouse: document.getElementById('metaHouse'),
+      deckChips: document.getElementById('deckChips'),
+      compatBadge: document.getElementById('compatBadge'),
+      houseBadge: document.getElementById('houseBadge'),
+      detailAvatar: document.getElementById('detailAvatar'),
+      detailName: document.getElementById('detailName'),
+      detailAge: document.getElementById('detailAge'),
+      detailHousePill: document.getElementById('detailHousePill'),
+      detailBio: document.getElementById('detailBio'),
+      detailIntent: document.getElementById('detailIntent'),
+      detailSigns: document.getElementById('detailSigns'),
+      detailFavorites: document.getElementById('detailFavorites'),
+      matchOrbLeft: document.getElementById('matchOrbLeft'),
+      matchOrbRight: document.getElementById('matchOrbRight'),
+      lock1: document.getElementById('lock1'),
+      lock2: document.getElementById('lock2'),
+      lock3: document.getElementById('lock3'),
+      journey1Copy: document.getElementById('journey1Copy'),
+      journey2Copy: document.getElementById('journey2Copy'),
+      journey3Copy: document.getElementById('journey3Copy'),
+      journeySummary: document.getElementById('journeySummary')
+    };
+
+    let toastTimer = null;
+    let autoRestartTimer = null;
+
+    init();
+
+    function syncViewportHeight() {
+      const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      document.documentElement.style.setProperty('--app-vh', `${Math.round(vh)}px`);
+    }
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+        return Object.assign({
+          screen: 'welcome',
+          currentProfile: 0,
+          journeyStep: 0,
+          musicEnabled: true
+        }, saved || {});
+      } catch (e) {
+        return { screen: 'welcome', currentProfile: 0, journeyStep: 0, musicEnabled: true };
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function init() {
+      syncViewportHeight();
+      window.addEventListener('resize', syncViewportHeight, { passive: true });
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', syncViewportHeight, { passive: true });
+      }
+      seedParticles();
+      bind();
+      reconcileStateWithSchedule();
+      render();
+      showScreen(state.screen, false);
+      refreshAudioButton();
+    }
+
+    function bind() {
+      const bootMusic = () => {
+        startMusicOnInteraction();
+        document.removeEventListener('click', bootMusic);
+        document.removeEventListener('touchstart', bootMusic);
+      };
+      document.addEventListener('click', bootMusic, { passive: true });
+      document.addEventListener('touchstart', bootMusic, { passive: true });
+
+      el.audioToggleBtn.addEventListener('click', toggleAudio);
+      el.audio.addEventListener('error', () => {
+        state.musicEnabled = false;
+        refreshAudioButton();
+        saveState();
+      });
+
+      el.enterBtn.addEventListener('click', () => showScreen('swipe'));
+      el.backBtn.addEventListener('click', goBack);
+      el.resetBtn.addEventListener('click', resetAll);
+      el.passBtn.addEventListener('click', () => {
+        state.currentProfile = (state.currentProfile + 1) % profiles.length;
+        renderProfile();
+        saveState();
+      });
+      el.likeBtn.addEventListener('click', () => {
+        burstHearts();
+        setTimeout(() => showScreen('match'), 500);
+      });
+      el.moreBtn.addEventListener('click', () => showScreen('details'));
+      el.detailsBackBtn.addEventListener('click', () => showScreen('swipe'));
+      el.detailsNextBtn.addEventListener('click', () => showScreen('match'));
+      el.toLetterBtn.addEventListener('click', () => showScreen('letter'));
+
+      el.toChapter1Btn.addEventListener('click', () => {
+        if (!canUnlock('chapter1')) return showLockedMessage('chapter1');
+        state.journeyStep = Math.max(state.journeyStep, 1);
+        saveState();
+        showScreen('date13');
+      });
+
+      el.toChapter2Btn.addEventListener('click', () => {
+        if (!canUnlock('chapter2')) return showLockedMessage('chapter2');
+        state.journeyStep = Math.max(state.journeyStep, 2);
+        saveState();
+        showScreen('dateBeco');
+      });
+
+      el.toJourneyBtn.addEventListener('click', () => {
+        state.journeyStep = Math.max(state.journeyStep, 2);
+        saveState();
+        showScreen('journey');
+      });
+
+      el.unlock3Btn.addEventListener('click', () => {
+        if (!canUnlock('chapter3')) return showLockedMessage('chapter3');
+        state.journeyStep = 3;
+        saveState();
+        showScreen('night');
+      });
+
+      el.toFinalFromNightBtn.addEventListener('click', () => {
+        state.journeyStep = 3;
+        saveState();
+        showScreen('final');
+      });
+
+      el.toFinalBtn.addEventListener('click', () => {
+        if (state.journeyStep < 3) return showLockedMessage('chapter3');
+        showScreen('final');
+      });
+
+      el.yesBtn1.addEventListener('click', () => acceptLove('primary'));
+      el.yesBtn2.addEventListener('click', () => acceptLove('secondary'));
+    }
+
+    function render() {
+      renderProfile();
+      renderMatch();
+      renderJourney();
+      updateProgress();
+    }
+
+    function setTheme(profile) {
+      document.documentElement.style.setProperty('--current-main', profile.colorMain);
+      document.documentElement.style.setProperty('--current-accent', profile.colorAccent);
+    }
+
+    function renderProfile() {
+      const p = profiles[state.currentProfile];
+      setTheme(p);
+
+      el.deckPhoto.style.backgroundImage = `url('${p.image}')`;
+      el.deckName.textContent = p.name;
+      el.deckAge.textContent = p.age;
+      el.deckQuote.textContent = p.quote;
+      el.metaIntent.textContent = p.intent;
+      el.metaHouse.textContent = p.house;
+      el.compatBadge.textContent = p.house === 'Grifinória' ? 'Coragem que faz rir' : 'SABEDORIA E CUIDADO';
+      el.houseBadge.textContent = `${p.icon} ${p.house}`;
+
+      el.deckChips.innerHTML = '';
+      p.chips.forEach(tag => {
+        const chip = document.createElement('span');
+        chip.className = 'chip';
+        chip.textContent = tag;
+        el.deckChips.appendChild(chip);
+      });
+
+      el.detailAvatar.style.backgroundImage = `url('${p.image}')`;
+      el.detailName.textContent = p.name;
+      el.detailAge.textContent = p.age;
+      el.detailHousePill.className = 'house-pill ' + (p.house === 'Grifinória' ? 'griff' : 'slyth');
+      el.detailHousePill.textContent = `${p.icon} ${p.house}`;
+      el.detailBio.textContent = p.bio;
+      el.detailIntent.textContent = p.intent;
+      el.detailSigns.textContent = p.signs;
+      el.detailFavorites.textContent = p.favorites;
+    }
+
+    function renderMatch() {
+      el.matchOrbLeft.style.backgroundImage = `url('${profiles[0].image}')`;
+      el.matchOrbRight.style.backgroundImage = `url('${profiles[1].image}')`;
+    }
+
+    function renderJourney() {
+      const c1 = canUnlock('chapter1');
+      const c2 = canUnlock('chapter2');
+      const c3 = canUnlock('chapter3');
+      const chapter1Place = document.getElementById('chapter1Place');
+      const chapter1Parchment = document.getElementById('chapter1Parchment');
+      const chapter2Btn = document.getElementById('toChapter2Btn');
+
+      if (c1) {
+        if (chapter1Place) chapter1Place.textContent = 'Nossa primeira parada, é um lugar onde luz, cor e surpresa transformam o encontro em uma experiência ainda mais especial.';
+        if (chapter1Parchment) chapter1Parchment.textContent = 'Entre cenários imersivos, momentos leves e memórias que começam a tomar forma, essa é só a primeira parte da jornada. Depois, seguimos para um almoço à sua escolha, com novas surpresas reservadas para o que ainda está por vir.';
+        if (chapter2Btn) chapter2Btn.textContent = 'Seguir para o capítulo 2';
+      } else {
+        if (chapter1Place) chapter1Place.textContent = 'Às 13:00, nossa jornada começa tomando café. Quero que esse início seja leve: conversa, carinho, olhar tranquilo e aquela sensação de que o dia foi pensado para você. Aqui, algumas pistas começam a aparecer sobre o capítulo das 14:30.';
+        if (chapter1Parchment) chapter1Parchment.textContent = 'Preste atenção nos sinais: existe um destino com clima bruxo, vassouras no nome e uma magia que combina com nós dois. Ainda não é hora de revelar tudo, só de deixar o coração curioso para a próxima parada.';
+        if (chapter2Btn) chapter2Btn.textContent = 'Seguir para o segundo capítulo';
+      }
+
+      el.lock1.textContent = state.journeyStep >= 1 ? 'Revelado' : (c1 ? 'Pronto para abrir' : 'Selado');
+      el.lock2.textContent = state.journeyStep >= 2 ? 'Revelado' : (c2 ? 'Pronto para abrir' : 'Selado');
+      el.lock3.textContent = state.journeyStep >= 3 ? 'Revelado' : (c3 ? 'Pronto para abrir' : 'Selado');
+
+      el.unlock3Btn.disabled = !c3;
+      el.unlock3Btn.className = 'cta ' + (c3 ? 'cta-primary tiny' : 'cta-secondary tiny');
+      el.unlock3Btn.textContent = state.journeyStep >= 3 ? 'Abrir Capítulo final✨' : 'Revelar o capítulo das 21:00';
+
+      el.toFinalBtn.disabled = state.journeyStep < 3;
+      el.toFinalBtn.className = 'cta ' + (state.journeyStep >= 3 ? 'cta-primary' : 'cta-secondary');
+
+      el.journeySummary.textContent = state.journeyStep >= 3
+        ? 'Sem pressa. Até no mundo mágico, algumas páginas só se revelam quando chega a hora certa.'
+        : 'Sem pressa. A próxima página permanece selada até o relógio permitir.';
+    }
+
+    function showScreen(id, persist = true) {
+      if (!screenOrder.includes(id)) id = 'welcome';
+      if (id === 'date13' && !canUnlock('chapter1')) id = 'letter';
+      if (id === 'dateBeco' && !canUnlock('chapter2')) id = 'date13';
+      if (id === 'night' && !canUnlock('chapter3')) id = 'journey';
+      if (id === 'final' && state.journeyStep < 3) id = 'journey';
+      el.screens.forEach(s => s.classList.toggle('active', s.id === id));
+      state.screen = id;
+      renderJourney();
+      el.backBtn.style.visibility = id === 'welcome' ? 'hidden' : 'visible';
+      if (persist) saveState();
+      updateProgress();
+    }
+
+    function goBack() {
+      const idx = screenOrder.indexOf(state.screen);
+      if (idx <= 0) return;
+      showScreen(screenOrder[idx - 1]);
+    }
+
+    function updateProgress() {
+      const idx = screenOrder.indexOf(state.screen);
+      el.progressSpans.forEach((span, i) => span.classList.toggle('active', i <= idx));
+    }
+
+    function resetAll() {
+      localStorage.removeItem(STORAGE_KEY);
+      if (autoRestartTimer) clearTimeout(autoRestartTimer);
+      el.finalModal.classList.remove('show');
+      state.screen = 'welcome';
+      state.currentProfile = 0;
+      state.journeyStep = 0;
+      state.musicEnabled = true;
+      render();
+      showScreen('welcome', false);
+      saveState();
+    }
+
+    function getMaxJourneyStepAllowedNow() {
+      if (canUnlock('chapter3')) return 3;
+      if (canUnlock('chapter2')) return 2;
+      if (canUnlock('chapter1')) return 1;
+      return 0;
+    }
+
+    function reconcileStateWithSchedule() {
+      const maxAllowed = getMaxJourneyStepAllowedNow();
+      if (state.journeyStep > maxAllowed) {
+        state.journeyStep = maxAllowed;
+      }
+      const allowedByScreen = {
+        welcome: true,
+        swipe: true,
+        details: true,
+        match: true,
+        letter: true,
+        date13: canUnlock('chapter1'),
+        dateBeco: canUnlock('chapter2'),
+        journey: true,
+        night: canUnlock('chapter3'),
+        final: state.journeyStep >= 3
+      };
+      if (!allowedByScreen[state.screen]) {
+        state.screen = 'journey';
+      }
+      saveState();
+    }
+
+    function burstHearts() {
+      for (let i = 0; i < 18; i++) {
+        setTimeout(() => {
+          const n = document.createElement('div');
+          n.className = 'pulse-heart';
+          n.textContent = ['💛','✨','💫','🤍','⭐'][Math.floor(Math.random() * 5)];
+          n.style.left = (20 + Math.random() * 60) + '%';
+          n.style.top = (32 + Math.random() * 28) + '%';
+          n.style.setProperty('--dx', ((Math.random() * 120) - 60) + 'px');
+          n.style.setProperty('--rot', ((Math.random() * 90) - 45) + 'deg');
+          document.body.appendChild(n);
+          setTimeout(() => n.remove(), 1500);
+        }, i * 40);
+      }
+    }
+
+    function acceptLove(mode = 'primary') {
+      const message = mode === 'secondary'
+        ? 'Então deixa essa noite terminar do jeito mais bonito possível: comigo e você, juntinhos até o amanhecer? 💛'
+        : 'Espero que você tenha gostado da experiência. Se o seu coração sorriu com tudo isso, eu posso ganhar um beijo seu? 💛';
+      if (el.finalModalMessage) {
+        el.finalModalMessage.textContent = message;
+      }
+      saveState();
+      burstHearts();
+      el.finalModal.classList.add('show');
+      el.finalModal.setAttribute('aria-hidden', 'false');
+      if (autoRestartTimer) clearTimeout(autoRestartTimer);
+      autoRestartTimer = setTimeout(() => {
+        localStorage.removeItem(STORAGE_KEY);
+        window.location.reload();
+      }, 3600);
+    }
+
+    function canUnlock(chapterKey) {
+      const target = SCHEDULE[chapterKey];
+      if (!target) return false;
+
+      const now = new Date();
+      const unlockAt = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        target.day,
+        target.hour,
+        target.minute,
+        0,
+        0
+      );
+
+      return now >= unlockAt;
+    }
+
+    function showLockedMessage(chapterKey) {
+      const target = SCHEDULE[chapterKey];
+      const hh = String(target.hour).padStart(2, '0');
+      const mm = String(target.minute).padStart(2, '0');
+      showToast(`Ainda não, meu bem. Esta página só abre no dia 28 às ${hh}h${mm}. O castelo respeita o próprio relógio.`);
+    }
+
+    function showToast(message) {
+      if (toastTimer) clearTimeout(toastTimer);
+      el.lockToast.textContent = message;
+      el.lockToast.classList.add('show');
+      toastTimer = setTimeout(() => el.lockToast.classList.remove('show'), 2600);
+    }
+
+    async function startMusicOnInteraction() {
+      if (!state.musicEnabled || !el.audio) return;
+      try {
+        const canPlay = el.audio.querySelector('source')?.getAttribute('src');
+        if (!canPlay) return;
+        await el.audio.play();
+        el.audioToggleBtn.classList.remove('audio-off');
+        el.audioToggleBtn.classList.add('audio-on');
+      } catch (e) {
+        el.audioToggleBtn.classList.add('audio-off');
+      }
+    }
+
+    async function toggleAudio() {
+      if (!el.audio) return;
+      if (el.audio.paused) {
+        state.musicEnabled = true;
+        await startMusicOnInteraction();
+      } else {
+        el.audio.pause();
+        state.musicEnabled = false;
+      }
+      refreshAudioButton();
+      saveState();
+    }
+
+    function refreshAudioButton() {
+      const playing = el.audio && !el.audio.paused && state.musicEnabled;
+      el.audioToggleBtn.classList.toggle('audio-on', playing);
+      el.audioToggleBtn.classList.toggle('audio-off', !playing);
+      el.audioToggleBtn.setAttribute('aria-label', playing ? 'Pausar música' : 'Ativar música');
+      el.audioToggleBtn.title = playing ? 'Pausar música' : 'Ativar música';
+    }
+
+    function seedParticles() {
+      const holder = document.getElementById('particles');
+      for (let i = 0; i < 52; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDelay = '-' + (Math.random() * 8) + 's';
+        p.style.animationDuration = (7 + Math.random() * 5) + 's';
+        holder.appendChild(p);
+      }
+    }
+  </script>
+</body>
+</html>
